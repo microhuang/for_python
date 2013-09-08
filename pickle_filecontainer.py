@@ -2,6 +2,7 @@ import cPickle
 class PrettyClever(object):
     def __init__(self, *stuff):
             self.stuff=stuff
+    def p(self, x): print "Hello,", x
     def __getstate__(self):
             def normalize(x):
                     if isinstance(x, file):
@@ -23,6 +24,7 @@ anInstance=PrettyClever(1,2,3)
 saved=cPickle.dumps(anInstance)
 reloaded=cPickle.loads(saved)
 assert anInstance.stuff==reloaded.stuff
+reloaded.p("world")
 
 anotherInstance=PrettyClever(1,2,open('tags.xml','w'))
 
