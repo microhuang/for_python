@@ -29,7 +29,8 @@ for x,y in par_loop(None,a,b):
 
 
 
-
+for x,y in itertools.izip(a,b):
+    print x,y
 
 
 
