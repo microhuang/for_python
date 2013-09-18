@@ -16,3 +16,17 @@ print subp.returncode
 
 
 #http://docs.python.org/2/library/subprocess.html#module-subprocess
+
+
+
+
+print subp.pid
+
+while subp.poll()==None:
+  c=subp.stdout.readline()
+  print c
+
+print subp.returncode
+
+
+#注意wait()和poll()的用法区别
