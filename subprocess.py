@@ -40,3 +40,38 @@ print subp.returncode
 
 
 #select poll epoll 管道
+
+
+
+
+
+import subprocess
+import select  
+import time  
+import signal  
+import os  
+
+cmd="python -u /tmp/produce.py"
+cmd="php /tmp/test.php"
+timeout = 60
+pro = subprocess.Popen(cmd, stdout=subprocess.PIPE,shell = True)
+print time.time()
+
+while 1:
+    while_begin = time.time()
+    print 'timeout',timeout
+    fs = select.select([pro.stdout], [], [], timeout)
+    if pro.stdout in fs[0]:
+            tmp = pro.stdout.read()
+            print 'read', tmp
+            if not tmp:
+                    print 'end'
+                    print time.time() 
+                    break
+    else:
+            print 'outoftime'
+            print os.kill(pro.pid, signal.SIGKILL),
+            break
+    timeout = timeout - (time.time() - while_begin)
+
+print 'end'
