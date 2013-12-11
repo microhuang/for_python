@@ -1,0 +1,8 @@
+import rlcompleter
+import readline
+
+readline.parse_and_bin("tab: complete")
+
+
+
+#im<tab>
