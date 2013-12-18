@@ -37,8 +37,8 @@ def square_diff(a, b):
 #使用装饰器，不修改原函数的情况下更改功能
 
 
-def decorator(F):
 
+def decorator(F):
     def new_F(a, b):
         print("input", a, b)
         return F(a, b)
@@ -56,3 +56,25 @@ def square_diff(a, b):
 
 print(square_sum(3, 4))
 print(square_diff(3, 4))
+
+
+
+#给装饰器增加参数支持
+
+
+
+# a new wrapper layer
+
+def pre_str(pre=''):
+    # old decorator
+    def decorator(F):
+        def new_F(a, b):
+            print(pre + "input", a, b)
+            return F(a, b)
+        return new_F
+    return decorator
+
+# get square sum
+@pre_str('^_^')
+def square_sum(a, b):
+    return a**2 + b**2
