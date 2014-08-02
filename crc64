@@ -26,7 +26,7 @@ _inittables(CRCTableh, CRCTablel, POLY64REVh, BIT_TOGGLE)
 # 删除我们不需要的名字，包括生成表的函数  
 del _inittables, POLY64REVh, BIT_TOGGLE  
 # 此模块公开了这两个函数：crc64和crc64digest  
-# 碰撞:1/(2^64)
+# 碰撞:1/(2^64) -- http://zh.wikipedia.org/wiki/CRC32
 def crc64(bytes, (crch, crcl)=(0,0)):  
       for byte in bytes:  
             shr = (crch & 0xFF) << 24 
