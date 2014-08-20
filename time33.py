@@ -1,4 +1,4 @@
-#time33算法和它的变种，提供良好的hash分布，并具有速度优势
+#time33算法和它的变种，提供良好的碰撞，并具有速度优势
 def time33(str):
     hash=0
     for c in str:
