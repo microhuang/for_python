@@ -164,3 +164,4 @@ class HashRing(object):
         m = md5_constructor()
         m.update(key)
         return map(ord, m.digest())
+
