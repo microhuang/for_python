@@ -9,6 +9,13 @@ print __debug__      #False
 print __debug__     #Ture
 
 
+
+assert x==y,"not equals"
+#等价于
+if __debug__ and not x==y:
+  raise AssertionError("not equals")
+
+
 #/usr/bin/python
 
 if __debug__:
