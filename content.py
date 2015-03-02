@@ -46,7 +46,9 @@ print "=> elasped lpop: %s s" % t.secs
 
 
 
-
+'''
+contextlib 提供简单易容的上下文管理扩展库
+'''
 
 
 
