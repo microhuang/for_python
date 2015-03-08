@@ -30,5 +30,5 @@ def work(jobs,results):
 进程池
 
 ```
-futures
+concurrent.futures.ProcessPoolExecutor
 ```
