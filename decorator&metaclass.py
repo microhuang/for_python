@@ -88,6 +88,7 @@ def mean(frist, second, *rest):
     numbers = (first, second) + rest
     return sum(numbers)/len(numbers)
     
+    
 mean = float_args_and_return(mean)
 
 
