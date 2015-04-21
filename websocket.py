@@ -29,4 +29,4 @@ if __name__ == '__main__':
 
 
 #js
-# new WebSocket('ws://192.168.13.203:8000/soc');
+# new WebSocket('ws://192.168.13.203:8000/soc');         #403
