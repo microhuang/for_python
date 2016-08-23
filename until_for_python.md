@@ -138,5 +138,10 @@ Python/symtable.c
          break;
 ```
 
+编译
 
+```
+make clean
+make -j4 OPT=-g CFLAGS=-g             #“-j4”选项是指开4个gcc编译，“-g”选项指开启gdb调试支持
+```
 
