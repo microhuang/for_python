@@ -7,6 +7,7 @@ def cleanImage(filePath, newFilePath):
   image = image.point(lambda x: 0 if x<143 else 255)
   image.save(newFilePath)
   #OCR识别
+  #tesseract可以按自己的要求进行识别训练
   subprocess.call(["tesseract",newFilePath,"output"])
   #获取结果
   outputFile = open("output.txt",'r')
