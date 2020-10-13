@@ -1,3 +1,4 @@
+# 交互解释器预加载文件
 # python startup file 
 # https://pypi.python.org/pypi/pbp.scripts
 import readline 
