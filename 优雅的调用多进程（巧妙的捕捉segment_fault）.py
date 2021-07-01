@@ -1,4 +1,9 @@
 # 巧妙的捕捉segment fault
+#
+# 应用场景：在模型等一些需要多进程并行处理的时候，我们之前的使用方式是通过类似：result = pool.map(func , ....)，的方式把任务func叫给子进程处理，
+# 此做法导致：子进程运行func的过程中，如果发生了segment fault等一些操作系统层面的错误，则调用方主进程一直等待子进程回复而不得，对于主进程而言，则看起来假死了
+#
+# 最佳实践：建议所有pool.map调用均按下列范式，以pool.apply_async替代
 
 from functools import partial
 from multiprocessing import Pool, Manager
@@ -11,9 +16,12 @@ def f(proc_dict, proc_id, *args):
   proc_dict[proc_id] = os.getpid()
   # ......
   if proc_id=='a':
-    # 模拟 segment fault
-    import ctypes
-    ctypes.string_at(0)
+    # 模拟 segment fault，此错误不能被try...except...
+    try:
+      import ctypes
+      ctypes.string_at(0)
+    except: # 无效，不能捕捉操作系统级错误
+      pass
     return '意思一下'
   elif proc_id=='b':
     # 模拟超时
@@ -28,7 +36,7 @@ def f(proc_dict, proc_id, *args):
 # proc_dict: {proc_id:pid}
 # timeout: 
 # m: max call
-# n: current call
+# n: this call
 def proc_result(proc, proc_id, proc_dict, timeout, m=2, n=1):
   if n+1>m:
     title = ''
@@ -52,6 +60,8 @@ if __name__ == '__main__':
   with Pool(4) as pool:
     manager = Manager()
     proc_dict = manager.dict()
+    # 传统使用方式
+    # result = pool.map(f, ('a','b','c'))
     for proc in ('a', 'b', 'c'):
       res = pool.apply_async(f, (proc_dict, proc, '业务传参'))
       ret[proc] = res
