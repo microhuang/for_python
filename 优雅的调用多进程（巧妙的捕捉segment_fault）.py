@@ -38,7 +38,7 @@ def f(proc_dict, proc_id, *args):
 # m: max call
 # n: current call
 def proc_result(proc, proc_id, proc_dict, timeout, m=2, n=1):
-    if n+1>m:
+    if n+1>m and m>1:
         title = ''
         if proc_dict.get(proc_id):
             title = proc_dict.get(proc_id)
