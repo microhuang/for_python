@@ -62,7 +62,7 @@ if __name__ == '__main__':
       except (ProcessLookupError, OSError) as err:
         print('进程(%s)已经结束了，可能是操作系统强制结束进程，可以在这里重试。。。' % (proc_dict[proc]))
       except Exception as err:
-          if err.__str__().startswith("code:666"):
+          if err.__str__().startswith("code:666,"):
               print('进程长时间无结果，请检查！')
               raise err
           else:
