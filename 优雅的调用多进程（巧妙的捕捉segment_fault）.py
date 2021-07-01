@@ -26,8 +26,8 @@ def f(proc_dict, proc_id, *args):
 def proc_result(proc, proc_id, proc_dict, timeout, n=1):
   if n+1>2:
     title = ''
-    if proc_dict.get(proc):
-      title = proc_dict.get(proc)
+    if proc_dict.get(proc_id):
+      title = proc_dict.get(proc_id)
     raise Exception("等待2轮，依然无运行结果，请检查进程(%s)是否异常" % (title))
   ret = None
   try:
