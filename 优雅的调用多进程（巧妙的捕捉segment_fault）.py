@@ -23,7 +23,12 @@ def f(proc_dict, proc_id, *args):
     # 模拟其他
     return '意思三下'
   
-def proc_result(proc, proc_id, proc_dict, timeout):
+def proc_result(proc, proc_id, proc_dict, timeout, n=1):
+  if n+1>2:
+    title = ''
+    if proc_dict.get(proc):
+      title = proc_dict.get(proc)
+    raise Exception("等待2轮，依然无运行结果，请检查进程(%s)是否异常" % (title))
   ret = None
   try:
     ret = proc.get(timeout)
@@ -31,7 +36,7 @@ def proc_result(proc, proc_id, proc_dict, timeout):
     try:
       import os
       os.kill(proc_dict[proc_id], 0)
-      ret = proc_result(proc, proc_id, proc_dict, timeout)
+      ret = proc_result(proc, proc_id, proc_dict, timeout, n+1)
     except (ProcessLookupError, OSError) as err:
       raise err
   return ret
