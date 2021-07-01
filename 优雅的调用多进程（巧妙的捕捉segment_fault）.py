@@ -38,11 +38,11 @@ def proc_result(proc, proc_id, proc_dict, timeout):
 
 if __name__ == '__main__':
   ret = {}
-  with Pool(4) as p:
+  with Pool(4) as pool:
     manager = Manager()
     proc_dict = manager.dict()
     for proc in ('a', 'b', 'c'):
-      res = p.apply_async(f, (proc_dict, proc, '业务传参'))
+      res = pool.apply_async(f, (proc_dict, proc, '业务传参'))
       ret[proc] = res
     for proc in ret:
       try:
