@@ -34,7 +34,7 @@ def proc_result(proc, proc_id, proc_dict, timeout, m=2, n=1):
     title = ''
     if proc_dict.get(proc_id):
       title = proc_dict.get(proc_id)
-    raise Exception("等待(%s)轮，依然无运行结果，请检查进程(%s)是否异常" % (m, title))
+    raise Exception("code:666,等待(%s)轮，依然无运行结果，请检查进程(%s)是否异常" % (m, title))
   ret = None
   try:
     ret = proc.get(timeout)
@@ -57,7 +57,13 @@ if __name__ == '__main__':
       ret[proc] = res
     for proc in ret:
       try:
-        timeout = 4
+        timeout = 2
         print('result: ', proc_result(ret[proc], proc, proc_dict, timeout))
       except (ProcessLookupError, OSError) as err:
         print('进程(%s)已经结束了，可能是操作系统强制结束进程，可以在这里重试。。。' % (proc_dict[proc]))
+      except Exception as err:
+          if err.__str__().startswith("code:666"):
+              print('进程长时间无结果，请检查！')
+              raise err
+          else:
+              raise err
