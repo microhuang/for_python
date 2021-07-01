@@ -1,0 +1,52 @@
+# 巧妙的捕捉segment fault
+
+from functools import partial
+from multiprocessing import Pool, Manager
+from multiprocessing.context import TimeoutError
+
+# 模拟业务
+def f(proc_dict, proc_id, *args):
+  import time
+  import os
+  proc_dict[proc_id] = os.getpid()
+  # ......
+  if proc_id=='a':
+    # 模拟 segment fault
+    import ctypes
+    ctypes.string_at(0)
+    return '意思一下'
+  elif proc_id=='b':
+    # 模拟超时
+    time.sleep(6)
+    return '意思两下'
+  else:
+    # 模拟其他
+    return '意思三下'
+  
+def proc_result(proc, proc_id, proc_dict, timeout):
+  ret = None
+  try:
+    ret = proc.get(timeout)
+  except TimeoutError as err:
+    try:
+      import os
+      os.kill(proc_dict[proc_id], 0)
+      ret = proc_result(proc, proc_id, proc_dict, timeout)
+    except (ProcessLookupError, OSError) as err:
+      raise err
+  return ret
+
+if __name__ == '__main__':
+  ret = {}
+  with Pool(4) as p:
+    manager = Manager()
+    proc_dict = manager.dict()
+    for proc in ('a', 'b', 'c'):
+      res = p.apply_async(f, (proc_dict, proc, '业务传参'))
+      ret[proc] = res
+    for proc in ret:
+      try:
+        timeout = 4
+        print('result: ', proc_result(ret[proc], proc, proc_dict, timeout))
+      except (ProcessLookupError, OSError) as err:
+        print('进程(%s)已经结束了，可能是操作系统强制结束进程，可以在这里重试。。。' % (proc_dict[proc]))
