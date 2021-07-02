@@ -10,9 +10,10 @@ from multiprocessing import Pool, Manager
 from multiprocessing.context import TimeoutError
 
 # 模拟业务
-def f(proc_dict, proc_id, *args):
+def func(proc_dict, proc_id, *args):
     import time
     import os
+    # 业务方务必主动告知自身PID
     proc_dict[proc_id] = os.getpid()
     # ......
     if proc_id=='a':
@@ -64,11 +65,13 @@ if __name__ == '__main__':
         # result = pool.map(f, ('a','b','c'))
         # 最佳实践
         for proc in ('a', 'b', 'c'):
-            res = pool.apply_async(f, (proc_dict, proc, '业务传参'))
+            res = pool.apply_async(func, (proc_dict, proc, '业务传参'))
             ret[proc] = res
+        # result = []
         for proc in ret:
             try:
                 timeout = 3
+                # result.append(proc_result(ret[proc], proc, proc_dict, timeout, m=3))
                 print('result: ', proc_result(ret[proc], proc, proc_dict, timeout, m=3))
             except (ProcessLookupError, OSError) as err:
                 # segment fault 将被这里捕捉到
