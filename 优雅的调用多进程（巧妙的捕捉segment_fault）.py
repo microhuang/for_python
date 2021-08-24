@@ -1,6 +1,6 @@
 # 巧妙的捕捉segment fault
 #
-# 应用场景：在模型等一些需要多进程并行处理的时候，我们之前的使用方式是通过类似：result = pool.map(func , ....)，的方式把任务func叫给子进程处理，
+# 应用场景：在模型等一些需要多进程并行处理的时候，之前的使用方式是通过类似：result = pool.map(func , ....)，的方式把任务func交给子进程处理，
 # 此做法导致：子进程运行func的过程中，如果发生了segment fault等一些操作系统层面的错误，则调用方主进程一直等待子进程回复而不得，对于主进程而言，则看起来假死了
 #
 # 最佳实践：建议所有pool.map调用均按下列范式，以pool.apply_async替代
@@ -66,6 +66,7 @@ logger = logging.getLogger()
 
 # get一个超大结果时：struct.error: 'i' format requires -2147483648 <= number <= 2147483647
 # python version: 3.3 - 3.7
+# bootstrap中使用： patch_mp_connection_bpo_17560()
 def patch_mp_connection_bpo_17560():
     """Apply PR-10305 / bpo-17560 connection send/receive max size update
 
